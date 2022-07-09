@@ -1,0 +1,72 @@
+from dash import Dash, html, dcc, dash_table, Input, Output
+app.layout = html.Div(children=[
+    html.H1(children='CS:GO Team, Weapons and Player stats'),
+    html.Div('This dashboard displays several data from various stats in CS:GO history'),
+    dcc.Graph(
+        id='bar',
+        figure=fig1
+    ),
+    dcc.Graph(
+        id='table',
+        figure=fig2
+    ),
+
+    dcc.Graph(
+        id='table3',
+        figure=fig3
+    ),
+    dcc.Graph(
+        id='table4',
+        figure=fig4
+    ),
+    dcc.Graph(
+        id='table5',
+        figure=fig5
+
+    ),
+    dcc.Graph(
+        id='table6',
+        figure=fig6
+    ),
+    dcc.Graph(
+        id='table7',
+        figure=fig7
+    ),
+    dcc.Graph(
+        id='table8',
+        figure=fig8
+
+    ),
+    html.Div(children='Economics'),
+    html.H1(children='CS:GO Economics by round, team and method of win'),
+    html.Div(id='text'),
+    dcc.Dropdown(teams, value='both teams', id='teams'),
+    dcc.Graph(
+        id='economics',
+        figure=fig9
+    )
+])
+
+
+@app.callback(
+    Output('text', 'children'),
+    Input('teams', 'value')
+)
+@app.callback(
+    Output('economics','figure'),
+    Input('teams','value')
+)
+def update_output(value):
+    return f'Team selected: {value}'
+
+
+def update_output(value):
+    if value == 'Both teams':
+        fig9 = px.bar(df9, x='Status', y='Money', color='Team', title='Round earnings per team and loss/win method')
+    else:
+        filtered = df9.loc[df['Team']==value, :,:,:]
+        fig9 = px.bar(filtered, x='Status', y='Money', color='Team')
+    return fig9
+
+if __name__ == '__main__':
+    app.run_server(debug=True)
